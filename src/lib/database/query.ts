@@ -1,12 +1,11 @@
 import { ExecuteStatementCommand } from "@aws-sdk/client-dynamodb";
-import { map } from "lodash";
+import { map, values } from "lodash";
 import { document } from "./document";
-import {itemToData   } from "dynamo-converters";
+import { itemToData, dataToItem } from "dynamo-converters";
 
 export const execute = async (params :any) =>{
   try {
     const valuesResponse = await document.send(new ExecuteStatementCommand(params));
-    console.log("Success. Item added.");
     return valuesResponse;
   } catch (err) {
     console.error(err);
@@ -14,10 +13,10 @@ export const execute = async (params :any) =>{
   }
 }
 
-export const insertDB = async (tableName: string, statement: string, parameters: any[]) => {
+export const insertDB = async (tableName: string, statement: string, parameters: any) => {
   const params = {
     Statement: `INSERT INTO ${tableName} VALUE ${statement}`,
-    Parameters: parameters
+    Parameters: values(dataToItem(parameters))
   };
   await execute(params)
   return "Successfully Save"
@@ -29,8 +28,18 @@ export const selectDB = async (tableName: string, statement: string = '') => {
     Statement: query,
   };
   const resultList =  await execute(params)
-  console.log(map(resultList.Items, (obj) => (obj)))
   return map(resultList.Items, (obj) => itemToData(obj))
 }
 
 
+
+export const updateDB = async (tableName: string, statement: string, parameters: any, where: string) => {
+  const params = {
+    Statement: `UPDATE ${tableName} SET ${statement} WHERE ${where}`,
+    Parameters: values(dataToItem(parameters))
+  };
+  console.log(dataToItem(parameters))
+  console.log(values(dataToItem(parameters)))
+  await execute(params)
+  return "Successfully Update"
+};
