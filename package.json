@@ -7,7 +7,8 @@
     "test": "jest",
     "dev": "ts-node-dev --respawn --pretty --transpile-only src/index.ts",
     "table-employee": "ts-node-dev src/tables/employee.ts",
-    "table-company": "ts-node-dev src/tables/company.ts"
+    "table-company": "ts-node-dev src/tables/company.ts",
+    "jwt": "ts-node-dev src/jwt.ts"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +29,7 @@
     "@aws-sdk/lib-dynamodb": "^3.186.0",
     "dynamo-converters": "^6.1.8",
     "ion-js": "^4.3.0",
-    "jose": "^4.10.0",
+    "jose": "^4.10.3",
     "jsbi": "^3.2.5",
     "lodash": "^4.17.21",
     "uuid": "^9.0.0"
